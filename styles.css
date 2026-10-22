@@ -2388,3 +2388,28 @@ h4 {
   height: auto;
   object-fit: contain;
 }
+/* 하나로 연결된 프로그레스바 */
+.progress-container {
+  width: 280px;
+  height: 6px;
+  display: flex;
+  gap: 0;
+  border-radius: 100px;
+  overflow: hidden;
+  background: #E6E0FA;
+}
+
+.progress-container .step {
+  flex: 1;
+  width: auto;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.progress-container .step.completed,
+.progress-container .step.active {
+  background: #8067E8;
+}
