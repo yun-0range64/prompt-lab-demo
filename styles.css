@@ -2413,3 +2413,8 @@ h4 {
 .progress-container .step.active {
   background: #8067E8;
 }
+
+#prompt-input[readonly] {
+  color: #9894AB;
+  cursor: not-allowed;
+}

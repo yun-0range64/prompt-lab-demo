@@ -1,4 +1,4 @@
-// 전역 변수 및 설정index = topic;
+// 전역 변수 및 설정index = topic;handlePromptSubmission
 
 let apiKey = "";
 
@@ -366,9 +366,10 @@ const handlePromptSubmission = () => {
 
   const currentQuestion = $('h2').text().trim();
 
-  // 사용자 입력 저장
+  // 사용자 입력 저장const alreadyGenerated 
 
   promptHistory[currentQuestion] = userInput;
+$('#prompt-input').prop('readonly', true);
 
   // 전체 누적 프롬프트 생성
 
@@ -589,6 +590,10 @@ $('#gpt-placeholder').css('display', 'flex');
 
 const alreadyGenerated = !!gptResponses[questionKey];
 
+$('#prompt-input')
+  .val(promptHistory[questionKey] || '')
+  .prop('readonly', alreadyGenerated);
+  
 $('#button-result, #button-result-mobile')
 
   .prop('disabled', alreadyGenerated)
