@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:image" content="./images/thumb.png">
+  <meta property="og:title" content="아이데이션 실험 도구">
+  <meta property="og:description" content="단계별 프롬프트 비교를 위한 실험도구입니다.">
+  <title>아이디어 생성 실험</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
+</head>
+
+<body>
+ <!--  모달 -->
+<div id="input-apikey">
+  <div class="modal-content">
+
+    <!-- Step 0 -->
+    <div id="step-guide1" class="modal-step">
+      <h4>📢 실험 참여 안내</h4>
+      <p class="modal-p">본 실험은 <span class="highlight">하나의 프롬프트에 들어가는<br/>여러 구성 요소</span>(ex. 배경, 기대효과, 예시 등)가<br/><span class="highlight">GPT의 아이디어 생성에 어떤 영향</span>을 주는지<br/><span class="highlight">하나씩</span> 살펴보는 방식으로 설계되었습니다.</p>
+      <p class="modal-p">각 단계에서는 <span class="highlight">프롬프트 구성 요소 중 하나만<br/>작성</span>해보며 결과물의 비교를 통해 해당 요소의<br/>영향력을 살펴보게 됩니다.</p>
+      <div class="btnstyle">
+        <button id="goToguide2">다음으로 →</button>
+      </div>
+    </div>
+    <!-- Step 0 -->
+    <div id="step-guide2" class="modal-step">
+      <h4>📢 실험 참여 안내</h4>
+      <p class="modal-p">실험에 사용되는 프롬프트 구성 요소는<br/><span class="highlight">선행 연구를 바탕</span>으로 선정된 항목들입니다.</p>
+      <p class="modal-p"><span class="highlight">참가자의 직무/ 전공 분야</span>(제품, UI/UX, 시스템,<br/>서비스 등)를 기반으로 <span class="highlight">자유롭게 아이디어</span>를<br/>구상해보세요.</p>
+        <div class="btnstyle">
+        <button id="goToApiStep">다음으로 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step-api" class="modal-step">
+      <h4>참여자 정보를 입력하세요.</h4>
+      <p class="modal-p">실험 참여를 위해 정보를 입력해주세요.</p>
+     
+      <div class="input-container">
+        <div class="input-wrapper-modal">
+
+          <input type="text" id="usernameInput"  placeholder="이름">
+        </div>
+        <div class="input-wrapper-modal">
+
+          <input type="text" id="apikeyInput" placeholder="API Key">
+        </div>
+      </div>
+      <div class="btnstyle">
+      <button id="goToTopicInput">다음으로 👉</button>
+      </div>
+      <p class="small-text">API KEY가 없으신가요? <a href="https://platform.openai.com/account/api-keys" target="_blank">여기서 발급받기</a></p>
+    </div>
+
+    <!-- STEP 2 -->
+    <!-- <div id="step-topic" class="modal-step" style="display: none;">
+      <h4>아이디어 주제를 입력하세요.</h4>
+      <p class="modal-p">어떤 주제에 대한 아이디어를 생성하고 싶은가요?</p>
+     
+      <div class="input-container">
+      <input type="text" id="topicInput" placeholder="Ex) 노인의 온라인 예매를 돕기 위한 UI/UX 설계">
+     </div>
+      <button id="saveApikey">시작하기 👋</button>
+    </div> -->
+ 
+     <!-- STEP 2 -->
+     <div id="step-topic" class="modal-step" style="display: none;">
+      <h4>아이디어 주제를 선택하세요.</h4>
+      <p class="modal-p">어떤 주제로 아이디어를 생성하고 싶은가요?</p>
+     
+      <div class="input-container1">
+      <button class="topicInput" data-topic="직장인의 일상 속 스트레스를 완화할 수 있는 디자인 아이디어">
+        <div class="topic-title">💡<br/>직장인의 일상 속 스트레스를<br/>완화할 수 있는 디자인 아이디어</div>
+        <div class="topic-desc">출퇴근, 과중한 업무, 인간관계 등 다양한 요인으로<br/>스트레스를 겪는 직장인을 위해 일상 속 스트레스를<br/>줄일 수 있는 디자인 아이디어를 제안해보세요.</div>
+      </button>
+      <button class="topicInput" data-topic="독거노인의 일상적 어려움을 해소하기 위한 디자인 아이디어">
+        <div class="topic-title">💡<br/>독거노인의 일상적 어려움을<br/>해소하기 위한 디자인 아이디어</div>
+        <div class="topic-desc">독거노인이 겪는 반복적 불편이나 고립 문제를<br/>해결할 수 있는 디자인 아이디어를 제안해보세요.</div>
+      </button>
+      </div>
+
+    </div>
+ 
+
+
+  </div>
+</div>
+
+
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <header>
+    <div class="header-wrapper">
+    <h1 class="site-logo">
+  <img src="./images/logo.png" alt="Prompt Lab">
+</h1>
+    
+       <div class="progress-container">
+  <div class="step active"></div>
+  <div class="step"></div>
+  <div class="step"></div>
+  <div class="step"></div>
+  <div class="step"></div>
+  <div class="step"></div>
+</div>
+
+<div class="participant-menu">
+  <button type="button" class="participant-btn">
+    <i data-lucide="clipboard-list"></i>
+    <span>참여 정보</span>
+    <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+  </button>
+
+  <div class="participant-dropdown">
+    <div class="dropdown-title">참여 정보</div>
+
+    <div class="info-item">
+      <span class="info-label">참가자 이름</span>
+      <span class="info-value" id="participant-name">-</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">실험 주제</span>
+      <span class="info-value" id="participant-topic">-</span>
+    </div>
+  </div>
+</div>
+  </div>
+  </header>
+  <main>
+  <div class="prompt-container">
+   <div class="prompt-wrapper">
+    
+    <img id="img-step" src="./images/undraw1.png" width="390px">
+   
+  <div class="text-container">
+    <div class="text-wrapper">
+     <h2>Q1</h2>
+     <h3>생성하고자 하는 아이디어가 <span id= "h3-point">필요한 이유</span>는 무엇인가요?</h3>
+     <p>아이디어가 필요한 배경이나 문제 상황, 해결하고자 하는 니즈(가치)를 설명해주세요.</p>
+    </div>
+
+   
+<div class="input-wrapper">
+  <div class="input-top">
+    <span class="example-label">예시</span>
+    <span class="example-text">
+      청소년들은 스마트폰에 과도하게 몰입해
+      학업 집중력 저하 등의 문제가 발생하고 있다.
+    </span>
+  </div>
+
+  <textarea
+    id="prompt-input"
+    maxlength="500"
+    placeholder="내용을 입력해주세요."
+  ></textarea>
+
+  <div class="input-bottom">
+    <span id="char-count">0 / 500</span>
+    <button id="button-result">전송 ↗</button>
+  </div>
+</div>
+
+<!-- 모바일에서만 보일 전송 버튼 -->
+<button id="button-result-mobile">전송</button>
+    </div>
+
+  
+   
+    </div>
+  </div>
+
+  <div class="resurt-container">
+
+  <!-- 아이디어 생성 전 안내 화면 -->
+  <div id="gpt-placeholder">
+    <img src="./images/undraw7.png" alt="AI 아이디어 생성">
+
+    <h3>아직 생성된 아이디어가 없어요.</h3>
+    <p>
+     왼쪽 입력란에 내용을 작성하고 전송해보세요.
+    </p>
+  </div>
+
+    <div class="chat-bubble" id="gpt-output">
+
+      
+      <span id="result-label">ChatGPT</span>
+      <div id="result-output"></div>
+
+      <div class="rating-container">
+        <span id="rating-label">결과물 평가</span>
+
+        <div class="rating-category" data-category="예측 가능성">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">1. 예측 가능성</span>
+            <span class="rating-desc">생성된 아이디어가 충분히 예상할 수 있는 범위였는가?</span>
+          </div>
+          <div class="stars">
+            ★★★★★
+          </div>
+        </div>
+        <div class="rating-category" data-category="의도일치성">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">2. 의도일치성</span>
+            <span class="rating-desc">생성된 아이디어가 입력한 내용(의도)과 얼마나 관련성이 있는가?</span>
+          </div>
+          <div class="stars">
+            ★★★★★
+          </div>
+        </div>
+        <div class="rating-category" data-category="활용가능성">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">3. 활용 가능성</span>
+            <span class="rating-desc">생성된 아이디어가 실제로 유용한 아이디어였는가?</span>
+          </div>
+          <div class="stars">
+            ★★★★★
+          </div>
+        </div>
+        <div class="rating-category" data-category="실현 가능성">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">4. 실현 가능성</span>
+            <span class="rating-desc">해당 아이디어가 실제로 구현될 가능성이 있는가?</span>
+          </div>
+          <div class="stars">
+            ★★★★★
+          </div>
+        </div>
+        <div class="rating-category" data-category="창의성(혁신+독창)">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">5. 창의성(혁신+독창)</span>
+            <span class="rating-desc">아이디어가 새롭거나 독특한 접근을 보여주었는가?</span>
+          </div>
+          <div class="stars">
+            ★★★★★
+          </div>
+        </div>
+        <div class="rating-category" data-category="가치성">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">6. 가치성</span>
+            <span class="rating-desc">아이디어가 사회적·사용자적 가치가 있는 문제를 다루고 있는가?</span>
+          </div>
+          <div class="stars">
+            ★★★★★
+          </div>
+        </div>
+        <div class="rating-category" data-category="명확성">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">7. 명확성</span>
+            <span class="rating-desc">아이디어 설명이 구체적이고 이해하기 쉬운가?</span>
+          </div>
+          <div class="stars">
+            ★★★★★
+          </div>
+        </div>
+        <div class="rating-category" data-category="기타 의견">
+          <div class="rating-text-wrapper">
+            <span class="rating-title">8. 기타 의견</span>
+            <span class="rating-desc">그 외 다른 의견이 있다면 남겨주세요.</span>
+          </div>
+          <textarea id="rating-input" placeholder="내용을 입력하세요."></textarea>
+          
+        </div>
+
+      </div>
+
+      <div class="button-wrapper">
+     
+        <button id="button-next">다음단계 ↗
+         <!-- <svg id="button-icon" xmlns="http://www.w3.org/2000/svg" 
+         width="20" height="20" 
+         fill="none" 
+         viewBox="0 0 24 24" 
+         stroke="currentColor"
+         style="margin-left: 8px;">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M9 5l7 7-7 7" />
+       </svg> -->
+        </button>
+        <button id="button-save" style="display: none;">제출하기</button>
+         </div>
+
+    </div>
+
+    <div class="mobile-nav-buttons">
+      <button id="button-next-mobile">다음단계</button>
+      <button id="button-save-mobile" style="display: none;">제출하기</button>
+    </div>
+
+  </div>
+
+  </main>
+  <script type="module">
+  import { saveUsernameToDB, saveFullResultsToDB } from './firebase.js';
+
+  // 전역에 연결
+  window.saveUsernameToDB = saveUsernameToDB;
+  window.saveFullResultsToDB = saveFullResultsToDB;
+  
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script> 
+  <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+
+  const nav = performance.getEntriesByType("navigation")[0];
+
+  if (nav?.type === "reload") {
+    window.location.replace("./index.html");
+  }
+</script>
+  
+  
+</body>
+</html>
